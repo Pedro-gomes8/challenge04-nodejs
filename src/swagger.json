@@ -1,0 +1,277 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ignite Challenge 04",
+    "description": "Small project to practice SOLID principles",
+    "version": "1.0.0",
+    "contact": {
+      "email": "pedro.gomes@poli.ufrj.br"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create new user",
+        "description": "Creates new user if email isn't already registered",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "Pedro Gomes",
+                  "email": "pedro.gomes@poli"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuidv4"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "Date"
+                    },
+                    "updated_at": {
+                      "type": "Date"
+                    }
+                  },
+                  "example": {
+                    "id": "13deca55-e5cc-455f-a388-5464e3e6486d",
+                    "name": "Pedro Gomes",
+                    "admin": false,
+                    "email": "pedro.gomes@poli",
+                    "created_at": "12/12/12",
+                    "updated_at": "12/12/12"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email is already in use"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "List all users",
+        "description": "Returns an array with all registered users, this requires an ID of an administrator passed on the request's header",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "header",
+            "required": true,
+            "description": "ID of user object",
+            "schema": {
+              "type": "string",
+              "format": "uuidv4"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuidv4"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "admin": {
+                        "type": "boolean"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "Date"
+                      },
+                      "updated_at": {
+                        "type": "Date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User not found or user is not admin"
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Turns an user into admin",
+        "description": "Receives user ID from route, changes the user's privileges in the database and returns another instance of the user object",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuidv4"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "Date"
+                    },
+                    "updated_at": {
+                      "type": "Date"
+                    }
+                  },
+                  "example": {
+                    "id": "13deca55-e5cc-455f-a388-5464e3e6486d",
+                    "name": "Pedro Gomes",
+                    "admin": true,
+                    "email": "pedro.gomes@poli",
+                    "created_at": "12/12/12",
+                    "updated_at": "12/12/12"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User does not exist"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "user_id",
+          "description": "User universal global identifier V4",
+          "in": "path",
+          "required": "true",
+          "schema": {
+            "type": "string",
+            "format": "uuidv4"
+          },
+          "style": "simple"
+        }
+      ]
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get info about User",
+        "description": "Receives user ID from route, searches for ID in the database and returns the User Object",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuidv4"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "created_at": {
+                      "type": "Date"
+                    },
+                    "updated_at": {
+                      "type": "Date"
+                    }
+                  },
+                  "example": {
+                    "id": "13deca55-e5cc-455f-a388-5464e3e6486d",
+                    "name": "Pedro Gomes",
+                    "admin": true,
+                    "email": "pedro.gomes@poli",
+                    "created_at": "12/12/12",
+                    "updated_at": "12/12/12"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User does not exist"
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": "User universal global identifier V4",
+            "in": "path",
+            "required": "true",
+            "schema": {
+              "type": "string",
+              "format": "uuidv4"
+            },
+            "style": "simple"
+          }
+        ]
+      }
+    }
+  }
+}
